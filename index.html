@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>Flexy Tip - A jQuery Plug-In</title> 
+</head>
+
+<body>
+<div align="center">
+<h1 style="width:100px;border:1px solid yellow;">Flexy Tip!</h1>
+</div>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" src="jquery.flexyTip.js"></script>
+<script type="text/javascript">
+
+$(function () {
+    $('h1').flexyTip(
+        '<h2>lolwat</h2>', {
+            'startX': 'left',
+            'startY': 'bottom',
+            'tipCSS': {
+                'border': '1px solid #ff0000'
+            }
+        }
+    );
+});
+
+</script>
+</body>
+
+</html>
