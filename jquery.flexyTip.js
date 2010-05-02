@@ -9,204 +9,198 @@
 
 ;;;;;(function($) {
 
-	$.fn.flexyTip = function(html, settings) {
-		var defaultParams = {
-			"xStart" : "right",
-			"yStart" : "top",
+    $.fn.flexyTip = function(html, settings) {
 
-			"direction" : "none",
+        var defaultParams = {
+            "xStart"        : "right",
+            "yStart"        : "top",
+            "direction"     : "none",
+            "tipCSS"        : {},
+            "containerCSS"  : { "opacity" : "0" },
+            "showAnimation" : { "opacity" : "1" },
+            "hideAnimation" : { "opacity" : "0" },
+            "showDuration"  : "medium",
+            "hideDuration"  : "medium",
+            "showEasing"    : "swing",
+            "hideEasing"    : "swing",
+            "onBeforeShow"  : function() {},
+            "onBeforeHide"  : function() {},
+            "onAfterShow"   : function() {},
+            "onAfterHide"   : function() {}
+        };
 
-			"tipCSS" : {},
-			"containerCSS" : { "opacity" : "0" },
-			
-			"showAnimation" : { "opacity" : "1" },
-			"hideAnimation" : { "opacity" : "0" },
+        settings = $.extend(defaultParams, settings);
 
-			"showDuration" : "medium",
-			"hideDuration" : "medium",
+        return $(this).each(function() {
 
-			"showEasing" : "swing",
-			"hideEasing" : "swing",
+            $(this).hover(function() {
 
-			"onBeforeShow" : function(){},
-			"onBeforeHide" : function(){},
-			"onAfterShow" : function(){},
-			"onAfterHide" : function(){}
-		};
+                var srcEl = $(this), offset = srcEl.offset(),
+                    xOffset = offset.left + ("right" == settings["xStart"] ? srcEl.outerWidth() : 0), yOffset = offset.top + ("bottom" == settings["yStart"] ? srcEl.outerHeight() : 0),
+                    direction = /left|right|up|down/.test(settings["direction"]) ? settings["direction"] : "none",
+                            
+                    container = document.createElement("span"),
+                    tip = document.createElement("span"),
 
-		settings = $.extend(defaultParams, settings);
+    
+                    containerCSS = {
+                        "display"  : "block",
+                        "position" : "absolute",
+                        "overflow" : "hidden",
+                        "left"     : xOffset + "px",
+                        "top"      : yOffset + "px"
+                    },
+    
+                    tipCSS = {
+                        "display"  : "block",
+                        "position" : "absolute"
+                    },
+    
+                    positionBinding = {
+                        "up"    : { "bottom" : "0px" },
+                        "down"  : { "top"    : "0px" },
+                        "left"  : { "right"  : "0px" },
+                        "right" : { "left"   : "0px" },
+                        "none"  : {}
+                    },
+    
+                    sideBinding = positionBinding[settings["direction"]];
 
-		return $(this).each(function() {
-			$(this).hover(function() {
-				
-				var srcEl = $(this), offset = srcEl.offset(),
-					xOffset = offset.left + ("right" == settings["xStart"] ? srcEl.outerWidth() : 0), yOffset = offset.top + ("bottom" == settings["yStart"] ? srcEl.outerHeight() : 0),
-					direction = /left|right|up|down/.test(settings["direction"]) ? settings["direction"] : "none",
-							
-					container = document.createElement("span"),
-					tip = document.createElement("span"),
+                tipCSS = $.extend(tipCSS, sideBinding, settings["tipCSS"]);
+                containerCSS = $.extend(containerCSS, settings["containerCSS"]);
 
-	
-					containerCSS = {
-						"display" : "block",
-						"position" : "absolute",
-						"overflow" : "hidden",
-						"left" : xOffset + "px",
-						"top" : yOffset + "px"
-					},
-	
-					tipCSS = {
-						"display" : "block",
-						"position" : "absolute"
-					},
-	
-					positionBinding = {
-						"up" : { "bottom" : "0px" },
-						"down" : { "top" : "0px" },
-						"left" : { "right" : "0px" },
-						"right" : { "left" : "0px" },
-						"none" : {}
-					},
-	
-					sideBinding = positionBinding[settings["direction"]];
+                // add the CSS to the cotainer
+                // and set the id to flexyLink
+                $(container).css(containerCSS).attr("id", "flexyTip");
 
-				tipCSS = $.extend(tipCSS, sideBinding, settings["tipCSS"]);
-				containerCSS = $.extend(containerCSS, settings["containerCSS"]);
+                // add the CSS to the pop and
+                // populate with HTML
+                $(tip).css(tipCSS).html(html);
 
-				// add the CSS to the cotainer
-				// and set the id to flexyLink
-				$(container).css(containerCSS).attr("id", "flexyTip");
+                container.appendChild(tip);
 
-				// add the CSS to the pop and
-				// populate with HTML
-				$(tip).css(tipCSS).html(html);
+                // call onShowStart as we insert into DOM
+                settings.onBeforeShow($('body')[0].appendChild(container));
 
-				container.appendChild(tip);
+                var    tipWidth = $(tip).outerWidth(),
+                    tipHeight = $(tip).outerHeight();
 
-				// call onShowStart as we insert into DOM
-				settings.onBeforeShow(document.getElementsByTagName('body')[0].appendChild(container));
+                // determine starting dimensions
+                switch (settings["direction"]) {
+                    case "up":
+                    case "down":
+                        var startDimensions = { "width" : tipWidth + "px" };
+                    break;
+    
+                    case "left":
+                    case "right":
+                        var startDimensions = { "height" : tipHeight + "px" };
+                    break;
+    
+                    case "none":
+                    default:
+                        var startDimensions = {
+                            "width"  : tipWidth + "px",
+                            "height" : tipHeight + "px"
+                        };
+                    break;
+                }
 
-				var	tipWidth = $(tip).outerWidth(),
-					tipHeight = $(tip).outerHeight();
+                // set one of the sides to full
+                // width or height (depending on
+                // direction)
+                $(container).css(startDimensions);
 
-				// determine starting dimensions
-				switch (settings["direction"]) {
-					case "up":
-					case "down":
-						var startDimensions = { "width" : tipWidth + "px" };
-					break;
-	
-					case "left":
-					case "right":
-						var startDimensions = { "height" : tipHeight + "px" };
-					break;
-	
-					case "none":
-					default:
-						var startDimensions = {
-							"width" : tipWidth + "px",
-							"height" : tipHeight + "px"
-						};
-					break;
-				}
+                // create an appropriate
+                // animation
+                switch (direction) {
+                    case "left":
+                        var animation = {
+                            "width" : tipWidth + "px",
+                            "left"  : "-=" + tipWidth + "px"
+                        };
+                    break;
+                    
+                    case "right":
+                        var animation = { "width" : tipWidth + "px" };
+                    break;
+                    
+                    case "up":
+                        var animation = {
+                            "height" : tipHeight + "px",
+                            "top"    : "-=" + tipHeight + "px"
+                        };
+                    break;
+                        
+                    case "down":
+                        var animation = { "height" : tipHeight + "px" };
+                    break;
+                }
 
-				// set one of the sides to full
-				// width or height (depending on
-				// direction)
-				$(container).css(
-						startDimensions);
+                animation = $.extend(animation, settings["showAnimation"]);
 
-				// create an appropriate
-				// animation
-				switch (direction) {
-					case "left":
-						var animation = {
-							"width" : tipWidth + "px",
-							"left" : "-=" + tipWidth + "px"
-						};
-					break;
-					
-					case "right":
-						var animation = { "width" : tipWidth + "px" };
-					break;
-					
-					case "up":
-						var animation = {
-							"height" : tipHeight + "px",
-							"top" : "-=" + tipHeight + "px"
-						};
-					break;
-						
-					case "down":
-						var animation = { "height" : tipHeight + "px" };
-					break;
-				}
+                // start animation with
+                // onShowEnd as callback
+                $(container).animate(
+                    animation,
+                    settings["duration"],
+                    settings["showEasing"],
+                    settings.onAfterShow
+                );
+            },
 
-				animation = $.extend(animation, settings["showAnimation"]);
+            // on mouse out
+            function() {
 
-				// start animation with
-				// onShowEnd as callback
-				$(container).animate(
-					animation,
-					settings["duration"],
-					settings["showEasing"],
-					settings.onAfterShow
-				);
-			},
+                var container = $("#flexyTip"),
+                    tip = container.children(),
+                    tipWidth = $(tip).outerWidth(),
+                    tipHeight = $(tip).outerHeight();
 
-			function() {
-				var	container = $("#flexyTip"),
-					tip = container.children(),
-					tipWidth = $(tip).outerWidth(),
-					tipHeight = $(tip).outerHeight();
+                settings.onBeforeHide(container);
 
-				// trigger the onHideStart
-				// handler event
-				settings.onBeforeHide(container);
+                switch (settings["direction"]) {
+                    case "left":
+                        var hideAnimation = {
+                            "width" : "hide",
+                            "left"  : "+=" + tipWidth + "px"
+                        };
+                    break;
+                    
+                    case "right":
+                        var hideAnimation = { "width" : "hide" };
+                    break;
+                    
+                    case "up":
+                        var hideAnimation = {
+                            "height" : "hide",
+                            "top"    : "+=" + tipHeight + "px"
+                        };
+                    break;
+                    
+                    case "down":
+                        var hideAnimation = { "height" : "hide" };
+                    break;
+                    
+                    default:
+                        var hideAnimation = {};
+                    break;
+                }
 
-				switch (settings["direction"]) {
-					case "left":
-						var hideAnimation = {
-							"width" : "hide",
-							"left" : "+=" + tipWidth + "px"
-						};
-					break;
-					
-					case "right":
-						var hideAnimation = { "width" : "hide" };
-					break;
-					
-					case "up":
-						var hideAnimation = {
-							"height" : "hide",
-							"top" : "+=" + tipHeight + "px"
-						};
-					break;
-					
-					case "down":
-						var hideAnimation = { "height" : "hide" };
-					break;
-					
-					default:
-						var hideAnimation = {};
-					break;
-				}
+                hideAnimation = $.extend(hideAnimation, settings["hideAnimation"]);
 
-				hideAnimation = $.extend(hideAnimation, settings["hideAnimation"]);
-
-				// start animation with
-				// onHideEnd as callback
-				container.animate(
-					hideAnimation,
-					settings["duration"],
-					settings["hideEasing"],
-					function() {
-						settings.onAfterHide();
-						container.remove();
-					}
-				);
-			});
-		});
-	};
-
+                // start animation with
+                // onHideEnd as callback
+                container.animate(
+                    hideAnimation,
+                    settings["duration"],
+                    settings["hideEasing"],
+                    function() {
+                        settings.onAfterHide();
+                        container.remove();
+                    }
+                );
+            });
+        });
+    };
 })(jQuery);
