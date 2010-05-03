@@ -1,10 +1,12 @@
-/* File        : jquery.flexyTips.js
- * Version     : 1.0.0 (Jan. 4, 2009)
+/**
+ * File        : jquery.flexyTips.js
+ * Version     : 0.9.0
  * Requires    : jQuery v1.2.6 or later
  * Description : A flexible, un-obtrusive way to show a tool-tip almost anywhere
+ *
  * Copyright (C) 2009 Dan Beam
  * Licensed under the MIT License: http://www.opensource.org/licenses/mit-license.php
- */
+ **/
 
 ; (function($) {
 
