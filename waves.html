@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>Flexy Tip - A jQuery Plug-In</title> 
+    <style type="text/css">
+
+    body {
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+        background: transparent url(http://upload.wikimedia.org/wikipedia/commons/4/45/Waves_in_pacifica_1.jpg) no-repeat top center;
+    }
+
+    .content {
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        border-top: 1px solid #b0b0b0;
+        background-color: #eee;
+        height: 10%;
+        overflow: hidden;
+    }
+
+    .sensor {
+        text-decoration: none;
+        background: #ccc;
+        display: block;
+        width: 39px;
+        height: 100%;
+        float: left;
+        border-right: 1px solid #b0b0b0;
+    }
+
+    </style>
+</head>
+
+<body>
+
+<div class="content">
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+<a href="#" class="sensor">&nbsp;</a>
+</div>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" src="jquery.flexyTip.js"></script>
+<script type="text/javascript">
+
+$(function() {
+
+    var commonCSS = {
+            'width'        : '38px',
+            'height'       : '0px',
+            'border-left'  : '1px solid #000099',
+            'border-right' : '1px solid #000099',
+            'border-top'   : '1px solid #000099',
+            'background'   : '#0000cc',
+            'opacity'      : '0.9'
+        },
+   
+        // compute the equivalent of height: 90%; 
+        getHeight = function() { return Math.floor($(window).height() * 0.9) + 'px'; };
+
+    // set resize handler
+    $(window).resize(function() { commonCSS.height = getHeight(); });
+    
+    $('.sensor').flexyTip('&nbsp;', {
+        'xStart'    : 'left',
+        'yStart'    : 'top',
+        'direction' : 'up',
+        'tipCSS'    : commonCSS
+    });
+
+    $(window).resize();
+});
+
+</script>
+</body>
+
+</html>
