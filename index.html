@@ -4,27 +4,100 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <title>Flexy Tip - A jQuery Plug-In</title> 
+    <style type="text/css">
+
+    body {
+        margin: 150px 0px;
+        padding: 0px;
+        text-align: center;
+    }
+
+    .content {
+        width: 420px;
+        margin: 0px auto;
+        text-align: left;
+        border: 1px dashed #333;
+        background-color: #eee;
+        height: 150px;
+    }
+
+    h1 {
+        float: left;
+        margin: 0;
+        padding: 5px;
+        width: 200px;
+    }
+
+    .right { text-align: right; }
+
+    </style>
 </head>
 
 <body>
-<div align="center">
-<h1 style="width:100px;border:1px solid yellow;">Flexy Tip!</h1>
+
+<div class="content">
+    <h1>Flexy Tip!</h1>
+    <h1 class="right">Flexy Tip!</h1>
+    <h1>Flexy Tip!</h1>
+    <h1 class="right">Flexy Tip!</h1>
+    <h1>Flexy Tip!</h1>
+    <h1 class="right">Flexy Tip!</h1>
 </div>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script type="text/javascript" src="jquery.flexyTip.js"></script>
 <script type="text/javascript">
 
-$(function () {
-    $('h1').flexyTip(
-        '<h2>lolwat</h2>', {
-            'startX': 'left',
-            'startY': 'bottom',
-            'tipCSS': {
-                'border': '1px solid #ff0000'
-            }
-        }
-    );
+$(function() {
+
+    var flexyStr     = '<h2>Some text</h2>',
+        commonTipCSS = {
+            'border'     : '1px solid #666666',
+            'background' : '#e6e6e6',
+            'width'      : '200px'
+        };
+
+    $('h1:eq(0)').flexyTip(flexyStr, {
+            'xStart'    : 'left',
+            'yStart'    : 'top',
+            'direction' : 'up',
+            'tipCSS'    : commonTipCSS
+    });
+
+    $('h1:eq(1)').flexyTip(flexyStr, {
+            'xStart'    : 'left',
+            'yStart'    : 'top',
+            'direction' : 'up',
+            'tipCSS'    : commonTipCSS
+    });
+
+    $('h1:eq(2)').flexyTip(flexyStr, {
+            'xStart'    : 'left',
+            'yStart'    : 'top',
+            'direction' : 'left',
+            'tipCSS'    : commonTipCSS
+    });
+
+    $('h1:eq(3)').flexyTip(flexyStr, {
+            'xStart'    : 'right',
+            'yStart'    : 'top',
+            'direction' : 'right',
+            'tipCSS'    : commonTipCSS
+    });
+
+    $('h1:eq(4)').flexyTip(flexyStr, {
+            'xStart'    : 'left',
+            'yStart'    : 'bottom',
+            'direction' : 'down',
+            'tipCSS'    : commonTipCSS
+    });
+
+    $('h1:eq(5)').flexyTip(flexyStr, {
+            'xStart'    : 'left',
+            'yStart'    : 'bottom',
+            'direction' : 'down',
+            'tipCSS'    : commonTipCSS
+    });
 });
 
 </script>
