@@ -12,7 +12,7 @@
     var debug = window.console && window.console.log || function(){};
 
     // if there's something else named flexyTip on jQuery's prototype, sue me
-    $.fn.flexyTip = function(html, settings) {
+    $.fn.flexyTip = function(tipHTML, settings) {
 
         debug("flexyTip started with the following settings:");
 
@@ -33,8 +33,7 @@
             "onBeforeHide"  : function() {},
             "onAfterShow"   : function() {},
             "onAfterHide"   : function() {}
-        },
-        settings);
+        }, settings);
 
         // iterate over all 
         return $(this).each(function() {
@@ -55,18 +54,15 @@
 
                 var srcEl     = $(this),
                     offset    = srcEl.offset(),
-                    xOffset   = offset.left + ("right"  == settings["xStart"] ? srcEl.outerWidth()  : 0),
-                    yOffset   = offset.top  + ("bottom" == settings["yStart"] ? srcEl.outerHeight() : 0),
-
-                    tipWidth  = $(tip).outerWidth(),
-                    tipHeight = $(tip).outerHeight(),
+                    xOffset   = offset.left + ("right"  === settings["xStart"] ? srcEl.outerWidth()  : 0),
+                    yOffset   = offset.top  + ("bottom" === settings["yStart"] ? srcEl.outerHeight() : 0),
 
                     containerCSS = {
                         "display"  : "block",
                         "position" : "absolute",
                         "overflow" : "hidden",
                         "left"     : xOffset + "px",
-                        "top"      : yOffset + "px"
+                        "top"      : yOffset + "px",
                     },
     
                     tipCSS = {
@@ -74,7 +70,7 @@
                         "position" : "absolute"
                     },
     
-                    positionBinding = {
+                    sideBinding = {
                         "up"    : { "bottom" : "0px" },
                         "down"  : { "top"    : "0px" },
                         "left"  : { "right"  : "0px" },
@@ -82,72 +78,86 @@
                         "none"  : {}
                     },
     
-                    direction   = /left|right|up|down/.test(settings["direction"]) ? settings["direction"] : "none",
-                    sideBinding = positionBinding[direction],
-
                     // this is extended later
                     animation = {},
 
                     // this is overwritten later
+                    tipDimensions,
                     startDimensions;
-
-                // extend default CSS
-                tipCSS       = $.extend(tipCSS, sideBinding, settings["tipCSS"]);
-                containerCSS = $.extend(containerCSS, settings["containerCSS"]);
-
-                // add the CSS to the cotainer and add the ID
-                $(container).css(containerCSS);
-
-                // add the CSS to the pop and populate with HTML
-                $(tip).css(tipCSS).html(html);
 
                 // there's a container and an inner element, here we're inserting the
                 // inner into the container (it doesn't live in the page DOM yet though)
                 container.appendChild(tip);
 
+                // only allow certain directions
+                settings["direction"] = (settings["direction"].match(/left|right|up|down/) || ["none"]).pop(),
+
+                // merge the styles on the inner element
+                tipCSS = $.extend(tipCSS, sideBinding[settings["direction"]], settings["tipCSS"]);
+    
+                // apply the styles and set the innerHTML
+                $(tip).css(tipCSS).html(tipHTML);
+
+                // merge the conatiner's CSS together
+                containerCSS = $.extend(containerCSS, settings["containerCSS"], tipDimensions);
+
+                // apply the styles
+                $(container).css(containerCSS);
+
+                debug("Inserting into DOM"); 
+
+                // insert into DOM
+                $('body').append(container);
+
+                // the computed initial dimensions of the tool tip
+                tipDimensions = {
+                    "width"  : $(tip).outerWidth(),
+                    "height" : $(tip).outerHeight()
+                };
+
                 // determine starting dimensions
                 switch (settings["direction"]) {
                     case "up"    :
                     case "down"  :
-                        startDimensions = { "width"  : tipWidth + "px" };
+                        startDimensions = { "width"  : tipDimensions.width + "px" };
                     break;
     
                     case "left"  :
                     case "right" :
-                        startDimensions = { "height" : tipHeight + "px" };
+                        startDimensions = { "height" : tipDimensions.height + "px" };
                     break;
     
                     case "none"  :
                     default      :
                         startDimensions = {
-                            "width"  : tipWidth + "px",
-                            "height" : tipHeight + "px"
+                            "width"  : tipDimensions.width  + "px",
+                            "height" : tipDimensions.height + "px"
                         };
                     break;
                 }
 
                 // create an appropriate animation
-                switch (direction) {
+                switch (settings["direction"]) {
                     case "left":
                         animation = $.extend(animation, {
-                            "width" : tipWidth + "px",
-                            "left"  : "-=" + tipWidth + "px"
+                            "width" : tipDimensions.width + "px",
+                            "left"  : "-=" + tipDimensions.width + "px"
                         });
                     break;
                     
                     case "right":
-                        animation = $.extend(animation, { "width"  : tipWidth + "px" });
+                        animation = $.extend(animation, { "width"  : tipDimensions.width + "px" });
                     break;
                     
                     case "up":
                         animation = $.extend(animation, {
-                            "height" : tipHeight + "px",
-                            "top"    : "-=" + tipHeight + "px"
+                            "height" : tipDimensions.height + "px",
+                            "top"    : "-=" + tipDimensions.height + "px"
                         });
                     break;
                         
                     case "down":
-                        animation = $.extend(animation, { "height" : tipHeight + "px" });
+                        animation = $.extend(animation, { "height" : tipDimensions.height + "px" });
                     break;
                 }
 
@@ -161,11 +171,6 @@
 
                 // call onShowStart as we insert into DOM
                 settings.onBeforeShow(container, container);
-
-                debug("Inserting into DOM"); 
-
-                // insert into DOM
-                $('body').append(container);
 
                 debug("Starting show animation");
 
