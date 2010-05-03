@@ -9,12 +9,12 @@
 ; (function($) {
 
     // allow debug messages when boolean is true and firebug is present
-    var debug = window.console && window.console.log || function(){};
+    //var debug = false && window.console && window.console.log || function(){};
 
     // if there's something else named flexyTip on jQuery's prototype, sue me
     $.fn.flexyTip = function(tipHTML, settings) {
 
-        debug("flexyTip started with the following settings:");
+        //debug("flexyTip started with the following settings:");
 
         // merge the settings provided with these defaults
         settings = $.extend({
@@ -44,7 +44,7 @@
             // use jQuery's hover function for now, maybe switch to hoverIntent?
             $(this).hover(function() {
                 
-                debug("Starting onMouseOver part of flexyTip");
+                //debug("Starting onMouseOver part of flexyTip");
                 
                 // these are global to both over and out hover functions
                 container = document.createElement("span");
@@ -104,7 +104,7 @@
                 // apply the styles
                 $(container).css(containerCSS);
 
-                debug("Inserting into DOM"); 
+                //debug("Inserting into DOM"); 
 
                 // insert into DOM
                 $('body').append(container);
@@ -167,12 +167,12 @@
                 // set one of the sides to full width or height (depending on direction)
                 $(container).css(startDimensions);
 
-                debug("Calling onBeforeShow callback");
+                //debug("Calling onBeforeShow callback");
 
                 // call onShowStart as we insert into DOM
                 settings.onBeforeShow(container, container);
 
-                debug("Starting show animation");
+                //debug("Starting show animation");
 
                 // start animation with
                 // onShowEnd as callback
@@ -181,7 +181,7 @@
                     settings["duration"],
                     settings["showEasing"],
                     function() {
-                        debug("Calling onAfterShow callback");
+                        //debug("Calling onAfterShow callback");
                         settings.onAfterShow.call(this, this);
                     }
                 );
@@ -190,13 +190,13 @@
             // on mouse out
             function() {
 
-                debug("Starting onMouseOut");
+                //debug("Starting onMouseOut");
 
                 var tipWidth       = $(tip).outerWidth(),
                     tipHeight      = $(tip).outerHeight(),
                     hideAnimation  = {};
 
-                debug("Calling onBeforeHide callback");
+                //debug("Calling onBeforeHide callback");
 
                 // call onBeforeHide event
                 settings.onBeforeHide.call(container, container);
@@ -231,7 +231,7 @@
                 // allow for custom animation
                 hideAnimation = $.extend(hideAnimation, settings["hideAnimation"]);
 
-                debug("Starting hide animation:");
+                //debug("Starting hide animation:");
 
                 // start animation with onHideEnd as callback
                 $(container).animate(
@@ -239,7 +239,7 @@
                     settings["duration"],
                     settings["hideEasing"],
                     function() {
-                        debug("Calling onAfterHide callback");
+                        //debug("Calling onAfterHide callback");
                         settings.onAfterHide.call(this, this);
                         $(container).remove();
                     }

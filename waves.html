@@ -25,12 +25,16 @@
 
     .sensor {
         text-decoration: none;
-        background: #ccc;
+        background-color: #ccc;
         display: block;
         width: 39px;
         height: 100%;
         float: left;
         border-right: 1px solid #b0b0b0;
+    }
+
+    .sensor:hover {
+        background-color: #bbb;
     }
 
     </style>
@@ -97,20 +101,22 @@
 $(function() {
 
     var commonCSS = {
-            'width'        : '38px',
-            'height'       : '0px',
-            'border-left'  : '1px solid #000099',
-            'border-right' : '1px solid #000099',
-            'border-top'   : '1px solid #000099',
-            'background'   : '#0000cc',
-            'opacity'      : '0.9'
+            'width'            : '38px',
+            'border-left'      : '1px solid #000066',
+            'border-right'     : '1px solid #000066',
+            'border-top'       : '1px solid #000066',
+            'background-color' : '#000077'
         },
    
         // compute the equivalent of height: 90%; 
-        getHeight = function() { return Math.floor($(window).height() * 0.9) + 'px'; };
+        getHeight = function() {
+            return Math.floor($(window).height() * 0.90) - 1 + 'px';
+        };
 
     // set resize handler
-    $(window).resize(function() { commonCSS.height = getHeight(); });
+    $(window).resize(function() {
+        commonCSS.height = getHeight();
+    });
     
     $('.sensor').flexyTip('&nbsp;', {
         'xStart'    : 'left',
