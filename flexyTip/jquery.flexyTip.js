@@ -46,12 +46,11 @@
                 
                 //debug("Starting onMouseOver part of flexyTip");
                 
-                // these are global to both over and out hover functions
+                // global to both over and out hover functions
                 container = document.createElement("span");
                 tip       = document.createElement("span");
 
-                // start really long var statement
-
+                // variables local to mouse over
                 var srcEl     = $(this),
                     offset    = srcEl.offset(),
                     xOffset   = offset.left + ("right"  === settings["xStart"] ? srcEl.outerWidth()  : 0),
@@ -174,8 +173,7 @@
 
                 //debug("Starting show animation");
 
-                // start animation with
-                // onShowEnd as callback
+                // start animation with onShowEnd as callback
                 $(container).animate(
                     animation,
                     settings["duration"],
