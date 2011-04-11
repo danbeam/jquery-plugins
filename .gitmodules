@@ -1,0 +1,3 @@
+[submodule "ellipsis"]
+	path = ellipsis
+	url = git@github.com:danbeam/ellipsis.git
