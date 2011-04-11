@@ -21,14 +21,11 @@
 */
 (function ($) {
 
-    // keep all default options here
-    var defaultConf = {'dataKey' : 'stackStyle'};
-
     // when we want to push styles onto our node's stack
     $.fn.pushStyle = function (css, conf) {
 
         // inherit defaults
-        conf = $.extend(defaultConf, conf || {});
+        conf = $.extend({'dataKey' : 'stackStyle'}, conf || {});
 
         // iterate over all nodes in the set
         return this.each(function (i, el) {
@@ -62,7 +59,7 @@
     $.fn.popStyle = function (conf) {
 
         // inherit defaults
-        conf = $.extend(defaultConf, conf || {});
+        conf = $.extend({'dataKey' : 'stackStyle'}, conf || {});
 
         // iterate over all nodes in the set
         return this.each(function (i, el) {
